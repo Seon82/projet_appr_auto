@@ -17,3 +17,9 @@ do_cool_stuff()
 * Code must be formatted using `black` and `isort`.
 * Use `pylint` to check code quality before committing.
 * Commit messages must follow [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/).
+
+## Links
+
+Find the report for this project on overleaf.
+
+Link to edit the report: https://www.overleaf.com/3389558812mrxxwvwnvfpd Link to view the report only: https://www.overleaf.com/read/vgmnnsqnfjdt
