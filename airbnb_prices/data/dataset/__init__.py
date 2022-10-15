@@ -1,3 +1,5 @@
+from typing import Dict, List
+
 import numpy as np
 import pandas as pd
 
@@ -70,11 +72,11 @@ class Dataset:
         return float(percentage.rstrip("%"))
 
     @property
-    def data(self):
+    def data(self) -> pd.DataFrame:
         """The data as a Pandas Dataframe."""
         return self._data
 
     @property
-    def columns(self):
+    def columns(self) -> Dict[str, List[str]]:
         """The columns by type: "category", "numerical" or "date" """
         return self._columns
