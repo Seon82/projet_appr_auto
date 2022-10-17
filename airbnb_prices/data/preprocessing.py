@@ -16,17 +16,10 @@ def fillnan_dataset(data: DataFrame) -> DataFrame:
     data = clean_ratings_columns(data)
     data = clean_host_response_time(data)
     data = clean_reviews(data)
-    # Clean host response time
+    # Clean host response rate
     data["Host Response Rate"] = data["Host Response Rate"].fillna(
         value=data["Host Response Rate"].median()
     )
-    # Drop the lines with NaNs in the other columns
-    # This columns contain too many NaNs to be treated
-    # Thay are dropped
-    if "Square feet" in data.columns():
-        data = data.drop(labels=["Square feet"], axis=1)
-    if "Postal Code" in data.columns():
-        data = data.drop(labels=["Postal Code"], axis=1)
     data = data.dropna()
     return data
 
@@ -74,9 +67,7 @@ def clean_host_response_time(data: pd.DataFrame) -> DataFrame:
     proba, _, _ = plt.hist(data["Host Response Time"].dropna())
     # Normalize probabilities
     proba = proba / np.sum(proba)
-    # Keep indexes with strictly positive values
-    idx_pos = np.where(proba > 0)
-    proba = proba[idx_pos]
+    proba = proba[proba > 0]
     time_values = ["within a few hours", "within an hour", "within a day", "a few days or more"]
     rand_values = np.random.choice(a=time_values, p=proba, size=nb_values)
     data["Host Response Time"] = data["Host Response Time"].fillna(value=pd.Series(data=rand_values))
