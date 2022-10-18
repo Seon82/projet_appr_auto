@@ -80,3 +80,10 @@ def clean_reviews(data: DataFrame) -> DataFrame:
     med_reviews_date = data[reviews_cols].median()
     data = data.fillna(value=med_reviews_date)
     return data
+
+
+def remove_nan(data: DataFrame):
+    """Remove columns with too many NaNs."""
+    to_drop = ["Square Feet", "Postal Code"]
+    data = data.drop(to_drop, axis=1)
+    return data
