@@ -77,6 +77,8 @@ def load_data(path: str, config: DatasetConfiguration) -> DataFrame:
         "Price": float,
     }
 
+    parse_dates = {"Host Since", "First Review", "Last Review"}
+
     for col in config.drop:
         dtype.pop(col)
 
@@ -93,7 +95,7 @@ def load_data(path: str, config: DatasetConfiguration) -> DataFrame:
         na_values=na_values,
         true_values=["t"],
         false_values=["f"],
-        parse_dates=["Host Since", "First Review", "Last Review"],
+        parse_dates=list(parse_dates.intersection(dtype)),
         converters={"Host Response Rate": percentage_parser},
         dayfirst=True,
     )
