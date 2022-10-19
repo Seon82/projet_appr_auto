@@ -169,16 +169,17 @@ def clean_host_response_time(data: pd.DataFrame) -> DataFrame:
     time_values = ["within a few hours", "within an hour", "within a day", "a few days or more"]
     host_resp_time = host_resp_time.replace(to_replace=time_values, value=[1, 2, 3, 4])
     proba = np.bincount(host_resp_time)
+    # Normalize probabilities
     proba = proba / np.sum(proba)
     proba = proba[proba > 0]
     rand_values = np.random.choice(a=time_values, p=proba, size=nb_values)
-    data["Host Response Time"] = data["Host Response Time"].fillna(value=pd.Series(data=rand_values))
+    data["Host Response Time"][data["Host Response Time"].isna()] = rand_values
     return data
 
 
 def clean_reviews(data: DataFrame) -> DataFrame:
     """Replace missing reviews by the median review date."""
     reviews_cols = ["First Review", "Last Review"]
-    med_reviews_date = data[reviews_cols].median()
+    med_reviews_date = data[reviews_cols].median(numeric_only=False)
     data = data.fillna(value=med_reviews_date)
     return data
