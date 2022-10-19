@@ -2,7 +2,6 @@ import json
 from dataclasses import dataclass
 from typing import List
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
@@ -139,7 +138,8 @@ def clean_ratings_columns(data: DataFrame) -> DataFrame:
     """
     ratings_cols = [
         "Overall Rating",
-        "Accuracy Rating" "Cleanliness Rating",
+        "Accuracy Rating",
+        "Cleanliness Rating",
         "Checkin Rating",
         "Communication Rating",
         "Location Rating",
@@ -165,11 +165,12 @@ def clean_host_response_time(data: pd.DataFrame) -> DataFrame:
     # Set a seed for reproducibility
     np.random.seed(42)
     nb_values = np.sum(data["Host Response Time"].isna())
-    proba, _, _ = plt.hist(data["Host Response Time"].dropna())
-    # Normalize probabilities
+    host_resp_time = data["Host Response Time"].dropna()
+    time_values = ["within a few hours", "within an hour", "within a day", "a few days or more"]
+    host_resp_time = host_resp_time.replace(to_replace=time_values, value=[1, 2, 3, 4])
+    proba = np.bincount(host_resp_time)
     proba = proba / np.sum(proba)
     proba = proba[proba > 0]
-    time_values = ["within a few hours", "within an hour", "within a day", "a few days or more"]
     rand_values = np.random.choice(a=time_values, p=proba, size=nb_values)
     data["Host Response Time"] = data["Host Response Time"].fillna(value=pd.Series(data=rand_values))
     return data
