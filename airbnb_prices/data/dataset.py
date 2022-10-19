@@ -5,6 +5,7 @@ from typing import List
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
+from sklearn.model_selection import train_test_split
 
 
 @dataclass
@@ -183,3 +184,21 @@ def clean_reviews(data: DataFrame) -> DataFrame:
     med_reviews_date = data[reviews_cols].median(numeric_only=False)
     data = data.fillna(value=med_reviews_date)
     return data
+
+
+def dummy_preprocessing(data: DataFrame):
+    to_drop = [
+        "Host Response Time",
+        "Price",
+        "neighbourhood",
+        "Neighborhood Group",
+        "Property Type",
+        "Room Type",
+        "Host Since",
+        "First Review",
+        "Last Review",
+    ]
+    target = data["Price"]
+    data = data.drop(to_drop, axis=1)
+    x_train, x_test, y_train, y_test = train_test_split(data, target, test_size=0.15, random_state=42)
+    return x_train, y_train, x_test, y_test
