@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO)
 def train_eval_once(
     model, x_train: DataFrame, y_train: DataFrame, x_test: DataFrame, y_test: DataFrame
 ):
-    """_Train a model and eval it on the test set.
+    """_Train a model and evaluate it on the test set.
 
     Args:
         model : _model to train_
