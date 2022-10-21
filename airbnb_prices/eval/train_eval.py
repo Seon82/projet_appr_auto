@@ -47,8 +47,8 @@ def cross_validation(model, x: DataFrame, y: DataFrame):
     # 5-fold crossvalidation
     kfold = KFold(n_splits=5)
     for train_index, test_index in kfold.split(x):
-        x_train, y_train = x[train_index], y[train_index]
-        x_test, y_test = x[test_index], y[test_index]
+        x_train, y_train = x.iloc[train_index], y.iloc[train_index]
+        x_test, y_test = x.iloc[test_index], y.iloc[test_index]
         _, score = train_eval_once(
             model=model, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test
         )
