@@ -3,7 +3,7 @@ import argparse
 import logging
 from pathlib import Path
 
-from airbnb_prices.data import dataset
+from airbnb_prices.data import dataset, feature_engineering
 from airbnb_prices.eval import train_eval
 from airbnb_prices.models import models
 
@@ -31,6 +31,8 @@ def main(model_str: str, hyperparams_str: str):
     data = dataset.load_data(DATA_PATH, config)
     logging.info("Replacing missing data ...")
     data = dataset.fillnan_dataset(data)
+    logging.info("Feature engineering ...")
+    feature_engineering.apply_feature_engineering(data, CONFIG_PATH)
     logging.info("Preprocessing ...")
     x_train, y_train, x_test, y_test = dataset.dummy_preprocessing(data)
     # Load the model
