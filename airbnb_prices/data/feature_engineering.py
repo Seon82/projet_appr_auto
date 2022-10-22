@@ -11,8 +11,8 @@ class FeatureEngineeringConfiguration:
     """
     Feature Engineering Configuration:
 
-    Has three attributes : 
-    self.distance_to_monuments, a list of dicts of the following form : 
+    Has three attributes :
+    self.distance_to_monuments, a list of dicts of the following form :
         {
             "name": Name of the monument,
             "coordinates": [
@@ -21,12 +21,12 @@ class FeatureEngineeringConfiguration:
             ]
         }
 
-    self.dates_delta, a list of dicts of the following form : 
+    self.dates_delta, a list of dicts of the following form :
         {
             "left_column": Name of a column to which the right column will be substraced,
             "right_column": Name of the right column
         }
-        
+
     self.date_to_duration, a list of dicts of the following form :
         {
             "column": Name of a column containing dates,
@@ -97,11 +97,12 @@ def add_date_to_duration(
         if date_to_duration_config["max_or_min"] == "max":
             dataset[f"{column_name} Duration from max"] = (
                 max(dataset[column_name]) - dataset[column_name]
-            )
+            ).apply(lambda x: x.days)
         elif date_to_duration_config["max_or_min"] == "min":
-            dataset[f"{column_name} Duration from min"] = dataset[column_name] - min(
-                dataset[column_name]
-            )
+            dataset[f"{column_name} Duration from min"] = (
+                dataset[column_name] - min(dataset[column_name])
+            ).apply(lambda x: x.days)
+
         else:
             raise ValueError(
                 'The "max_or_min" parameter in the config of "date_to_duration" should either be "max" or "min".'
@@ -125,11 +126,11 @@ def add_dates_delta(
         right_column = dates_delta_config["right_column"]
         dataset[f"Delta between {left_column} and {right_column}"] = (
             dataset[left_column] - dataset[right_column]
-        )
+        ).apply(lambda x: x.days)
 
 
-def apply_feature_engineering(dataset: pd.DataFrame, config_path: str)-> None:
-    """Applies successively all the existing feature engineering functions, i.e. : 
+def apply_feature_engineering(dataset: pd.DataFrame, config_path: str) -> None:
+    """Applies successively all the existing feature engineering functions, i.e. :
     - Adds the distance to monuments
     - Adds deltas between date columns
     - Adds duration from date column
