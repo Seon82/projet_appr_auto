@@ -47,7 +47,11 @@ def main(model_str: str, hyperparams_str: str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Airbnb price prediction program")
-    parser.add_argument("model", help="Model to train", type=str)
+    parser.add_argument(
+        "model",
+        help="Model to train (available: random forest, adaboost, gradient boosting, extreme random forest)",
+        type=str,
+    )
     parser.add_argument("--hyper", help="Hyperparameters", type=str, default="")
     args = parser.parse_args()
     main(model_str=args.model, hyperparams_str=args.hyper)
