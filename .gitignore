@@ -162,4 +162,5 @@ cython_debug/
 data/
 !airbnb_prices/data
 experiments/
+results/
 .vscode/launch.json
