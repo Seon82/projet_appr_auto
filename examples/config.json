@@ -1,0 +1,28 @@
+{
+    "drop": [
+        "Postal Code"
+    ],
+    "feature_engineering": {
+        "distance_to_monuments": [
+            {
+                "name": "Berlin Cathedral",
+                "coordinates": [
+                    52.519167,
+                    13.401111
+                ]
+            }
+        ],
+        "dates_delta": [
+            {
+                "left_column": "Last Review",
+                "right_column": "First Review"
+            }
+        ],
+        "date_to_duration": [
+            {
+                "column": "Host Since",
+                "max_or_min": "max"
+            }
+        ]
+    }
+}
