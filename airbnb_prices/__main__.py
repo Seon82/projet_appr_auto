@@ -13,6 +13,8 @@ DATA_PATH = Path("./data/train_airbnb_berlin.csv")
 
 def hyper_to_dict(hyper: str):
     """Convert string of hyperparameters to a dictionary."""
+    if not hyper:
+        return {}
     hyper = hyper.strip()
     hyper_blocks = hyper.split(",")
     hyper_dict = {}
