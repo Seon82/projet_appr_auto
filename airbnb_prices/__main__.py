@@ -3,7 +3,7 @@ import argparse
 import logging
 from pathlib import Path
 
-from airbnb_prices.data import dataset, feature_engineering
+from airbnb_prices.data import DataPipeline
 from airbnb_prices.eval import train_eval
 from airbnb_prices.models import models
 
@@ -29,21 +29,22 @@ def hyper_to_dict(hyper: str):
 
 def main(model_str: str, hyperparams_str: str):
     logging.info("Loading the dataset ...")
-    config = dataset.load_config(CONFIG_PATH)
-    data = dataset.load_data(DATA_PATH, config)
+    pipeline = DataPipeline.from_file(DATA_PATH, CONFIG_PATH)
     logging.info("Replacing missing data ...")
-    data = dataset.fillnan_dataset(data)
+    pipeline.infere_nan()
     logging.info("Feature engineering ...")
-    feature_engineering.apply_feature_engineering(data, CONFIG_PATH)
+    pipeline.apply_feature_engineering()
     logging.info("Preprocessing ...")
-    x_train, y_train, x_test, y_test = dataset.dummy_preprocessing(data)
+    pipeline.apply_preprocessing()
     # Load the model
     hyperparams = hyper_to_dict(hyperparams_str)
     model = models.get_model(model=model_str, hyperparams=hyperparams)
     logging.info("Training phase ...")
     # Training and evaluation
+    X_train, y_train = pipeline.train_data
+    X_val, y_val = pipeline.val_data
     _, score = train_eval.train_eval_once(
-        model=model, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test
+        model=model, x_train=X_train, y_train=y_train, x_test=X_val, y_test=y_val
     )
     logging.info("Exporting to csv ...")
     train_eval.export_results_to_csv(model_name=model_str, hyperparameters=hyperparams_str, score=score)
