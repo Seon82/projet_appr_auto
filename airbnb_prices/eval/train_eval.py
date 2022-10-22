@@ -7,7 +7,7 @@ from pandas import DataFrame
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import KFold
 
-logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def train_eval_once(
@@ -28,7 +28,7 @@ def train_eval_once(
     model.fit(x_train, y_train)
     y_pred = model.predict(x_test)
     score = np.sqrt(mean_squared_error(y_test, y_pred))
-    logging.info(" RMSE score on test set: {}".format(score))
+    logger.info(" RMSE score on test set: {}".format(score))
     return model, score
 
 

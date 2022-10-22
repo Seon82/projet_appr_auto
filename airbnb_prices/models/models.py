@@ -13,11 +13,12 @@ def get_model(model: str, hyperparams: Dict):
     Returns:
         chosen model object.
     """
-    if model == "random forest":
+    model = model.lower()
+    if model in ("random_forest", "rf"):
         return ensemble.RandomForestRegressor(**hyperparams)
-    if model == "extreme random forest":
+    if model in ("extreme_random_forest", "erh"):
         return ensemble.ExtraTreesRegressor(**hyperparams)
     if model == "adaboost":
         return ensemble.AdaBoostRegressor(**hyperparams)
-    if model == "gradient boosting":
+    if model == ("gradient_boosting", "gb"):
         return ensemble.GradientBoostingRegressor(**hyperparams)
