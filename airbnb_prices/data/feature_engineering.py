@@ -51,11 +51,6 @@ def add_date_to_duration(
                 dataset[column_name] - min(dataset[column_name])
             ).apply(lambda x: x.days)
 
-        else:
-            raise ValueError(
-                'The "max_or_min" parameter in the config of "date_to_duration" should either be "max" or "min".'
-            )
-
 
 def add_dates_delta(
     dataset: pd.DataFrame, feature_engineering_config: FeatureEngineeringConfig

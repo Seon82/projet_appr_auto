@@ -1,5 +1,5 @@
 """Run the airbnb prices detection system."""
-import argparse
+
 import logging
 from pathlib import Path
 
@@ -118,13 +118,5 @@ def main(model, hyperparameters, verbosity, no_export, data, config):
 
 
 if __name__ == "__main__":
+    # pylint: disable=no-value-for-parameter
     main()
-    parser = argparse.ArgumentParser(description="Airbnb price prediction program")
-    parser.add_argument(
-        "model",
-        help="Model to train (available models: see doc)",
-        type=str,
-    )
-    parser.add_argument("--hyper", help="Hyperparameters", type=str, default="")
-    args = parser.parse_args()
-    main(model_str=args.model, hyperparams_str=args.hyper)

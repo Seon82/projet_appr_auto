@@ -52,12 +52,13 @@ disable = """
     fixme,
     unnecessary-pass
     """
+extension-pkg-whitelist="pydantic"
 
 [tool.pylint.FORMAT]
 max-line-length=104
 
 [tool.pylint.BASIC]
-good-names="i,j,df,X,Y,x,y"
+good-names="i,j,df,X,Y,x,y,X_train,X_val,X_test"
 
 [tool.pylint.TYPECHECK]
 # List of members which are set dynamically and missed by Pylint inference
