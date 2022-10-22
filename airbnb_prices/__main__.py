@@ -7,12 +7,14 @@ from airbnb_prices.data import dataset, feature_engineering
 from airbnb_prices.eval import train_eval
 from airbnb_prices.models import models
 
-CONFIG_PATH = Path("./examples/dataset/config.json")
-DATA_PATH = Path("./data/train_airbnb_berlin.xls")
+CONFIG_PATH = Path("./examples/config.json")
+DATA_PATH = Path("./data/train_airbnb_berlin.csv")
 
 
 def hyper_to_dict(hyper: str):
     """Convert string of hyperparameters to a dictionary."""
+    if not hyper:
+        return {}
     hyper = hyper.strip()
     hyper_blocks = hyper.split(",")
     hyper_dict = {}
