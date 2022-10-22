@@ -28,6 +28,12 @@ class DataPipeline:
         self.infere_nan()
         self.apply_feature_engineering()
         self.apply_preprocessing()
+        self.dropna()
+
+    def dropna(self):
+        self.df_train = self.df_train.dropna()
+        self.df_val = self.df_val.dropna()
+        self.df_test = self.df_test.dropna()
 
     def infere_nan(self):
         self.df_train = infere_nan(self.df_train)
@@ -48,6 +54,7 @@ class DataPipeline:
         df = infere_nan(df)
         df = apply_feature_engineering(df, self.config.feature_engineering)
         _, df = apply_preprocessing(df, self.config.preprocessing, self.scalers)
+        df = df.dropna()
         return df
 
     @property
