@@ -118,9 +118,10 @@ def fillnan_dataset(data: DataFrame) -> DataFrame:
     data = clean_host_response_time(data)
     data = clean_reviews(data)
     # Clean host response rate
-    data["Host Response Rate"] = data["Host Response Rate"].fillna(
-        value=data["Host Response Rate"].median()
-    )
+    if "Host Response Rate" in data.columns : 
+        data["Host Response Rate"] = data["Host Response Rate"].fillna(
+            value=data["Host Response Rate"].median()
+        )
     data = data.dropna()
     return data
 
