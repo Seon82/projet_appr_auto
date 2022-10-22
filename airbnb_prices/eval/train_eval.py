@@ -1,4 +1,6 @@
 import logging
+from datetime import datetime
+from pathlib import Path
 
 import numpy as np
 from pandas import DataFrame
@@ -25,8 +27,8 @@ def train_eval_once(
     """
     model.fit(x_train, y_train)
     y_pred = model.predict(x_test)
-    score = mean_squared_error(y_test, y_pred)
-    logging.info(" MSE score on test set: {}".format(score))
+    score = np.sqrt(mean_squared_error(y_test, y_pred))
+    logging.info(" RMSE score on test set: {}".format(score))
     return model, score
 
 
@@ -54,3 +56,20 @@ def cross_validation(model, x: DataFrame, y: DataFrame):
         )
         cv_scores.append(score)
     return np.mean(cv_scores)
+
+
+def export_results_to_csv(model_name: str, hyperparameters: str, score: float):
+    """Generate a csv file to keep track of the results.
+
+    Args:
+        model_name (str): _name of the model
+        hyperparameters (str): _string of hyperparameters
+        score (float): RMSE score on the test set
+    """
+    results_dict = {"Model name": [model_name], "Hyperparameters": [hyperparameters], "RMSE": [score]}
+    results_df = DataFrame.from_dict(results_dict)
+    results_dir = Path("./results")
+    if not results_dir.exists():
+        results_dir.mkdir()
+    date_str = datetime.now().strftime("%m%d%Y%H%M%S")
+    results_df.to_csv(results_dir / (date_str + "_results.csv"))
