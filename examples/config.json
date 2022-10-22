@@ -1,7 +1,4 @@
 {
-    "drop": [
-        "Postal Code"
-    ],
     "feature_engineering": {
         "distance_to_monuments": [
             {
@@ -23,6 +20,26 @@
                 "column": "Host Since",
                 "max_or_min": "max"
             }
+        ]
+    },
+    "preprocessing": {
+        "ohe": [
+            "Host Response Time",
+            "Neighborhood Group",
+            "Property Type",
+            "Room Type"
+        ],
+        "standardize": [],
+        "drop": [
+            "Postal Code",
+            "neighbourhood",
+            "Host Since",
+            "First Review",
+            "Last Review",
+            "Host Response Time",
+            "Neighborhood Group",
+            "Property Type",
+            "Room Type"
         ]
     }
 }
