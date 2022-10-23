@@ -48,10 +48,10 @@ def hyper_to_dict(hyper: str):
     hyper_dict = {}
     for block in hyper_blocks:
         block_list = block.split("=")
-        if float(block_list[1]) % 1 == 0:
-            hyper_dict[block_list[0]] = int(block_list[1])
-        else:
+        try:
             hyper_dict[block_list[0]] = float(block_list[1])
+        except ValueError:
+            hyper_dict[block_list[0]] = block_list[1]
     return hyper_dict
 
 
