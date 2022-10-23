@@ -3,10 +3,19 @@
 
 airbnb_prices is a python package offering various utilities to help predict the price of Airbnb rentals. 
 
-## Simple example
+## Quickstart
+
 ```python
-do_cool_stuff()
+from airbnb_prices import DataPipeline
+
+pipeline = DataPipeline.from_file("./data/train_airbnb_berlin.csv", "./examples/config.json")
+
+pipeline.run()
+X_train, y_train = pipeline.train_data
 ```
+See the [examples](./examples) directory for more detailed examples.
+
+The package also exposes a CLI for quick model training, run `python airbnb_prices --help` for more information.
 
 ## Install
 * Clone the repository.
