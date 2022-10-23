@@ -26,10 +26,13 @@ def train_eval_once(
         _model: trained model
     """
     model.fit(x_train, y_train)
-    y_pred = model.predict(x_test)
-    score = np.sqrt(mean_squared_error(y_test, y_pred))
-    logger.info(" RMSE score on test set: {}".format(score))
-    return model, score
+    y_pred_train = model.predict(x_train)
+    y_pred_test = model.predict(x_test)
+    train_score = np.sqrt(mean_squared_error(y_train, y_pred_train))
+    test_score = np.sqrt(mean_squared_error(y_test, y_pred_test))
+    logger.info(" RMSE score on train set: {}".format(train_score))
+    logger.info(" RMSE score on validation set: {}".format(test_score))
+    return model, train_score, test_score
 
 
 def cross_validation(model, x: DataFrame, y: DataFrame):
@@ -58,7 +61,7 @@ def cross_validation(model, x: DataFrame, y: DataFrame):
     return np.mean(cv_scores)
 
 
-def export_results_to_csv(model_name: str, hyperparameters: str, score: float):
+def export_results_to_csv(model_name: str, hyperparameters: str, train_score: float, val_score: float):
     """Generate a csv file to keep track of the results.
 
     Args:
@@ -66,7 +69,12 @@ def export_results_to_csv(model_name: str, hyperparameters: str, score: float):
         hyperparameters (str): _string of hyperparameters
         score (float): RMSE score on the test set
     """
-    results_dict = {"Model name": [model_name], "Hyperparameters": [hyperparameters], "RMSE": [score]}
+    results_dict = {
+        "Model name": [model_name],
+        "Hyperparameters": [hyperparameters],
+        "RMSE train": [train_score],
+        "RMSE val": [val_score],
+    }
     results_df = DataFrame.from_dict(results_dict)
     results_dir = Path("./results")
     if not results_dir.exists():
