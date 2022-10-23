@@ -29,20 +29,47 @@
             "Property Type",
             "Room Type"
         ],
-        "standardize": [],
-        "min_max": [],
-        "drop": [
-            "Square Feet",
-            "Postal Code",
-            "neighbourhood",
-            "Host Since",
-            "First Review",
-            "Last Review",
-            "Host Response Time",
-            "Neighborhood Group",
-            "Property Type",
-            "Room Type"
+        "standardize": [
+            "Accomodates",
+            "Bathrooms",
+            "Bedrooms",
+            "Beds",
+            "Delta between Last Review and First Review",
+            "Distance to Berlin Cathedral",
+            "Guests Included",
+            "Host Response Rate",
+            "Host Since Duration from max",
+            "Instant Bookable",
+            "Latitude",
+            "Longitude",
+            "Min Nights",
+            "Overall Rating",
+            "Reviews"
         ],
-        "keep": []
+        "min_max": [],
+        "drop": [],
+        "keep": [
+            "Accomodates",
+            "Bathrooms",
+            "Bedrooms",
+            "Beds",
+            "Delta between Last Review and First Review",
+            "Distance to Berlin Cathedral",
+            "Guests Included",
+            "Host Response Rate",
+            "Host Since Duration from max",
+            "Instant Bookable",
+            "Latitude",
+            "Longitude",
+            "Min Nights",
+            "Overall Rating",
+            "Property Type_Apartment",
+            "Property Type_Condominium",
+            "Property Type_Hotel",
+            "Property Type_House",
+            "Property Type_Loft",
+            "Reviews",
+            "Room Type_Entire home/apt"
+        ]
     }
 }
