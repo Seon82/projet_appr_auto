@@ -88,7 +88,7 @@ def hyper_to_dict(hyper: str):
     help="Path to the configuration json.",
 )
 def main(model, hyperparameters, verbosity, no_export, data, config):
-    logger = create_logger(verbosity, __name__)
+    logger = create_logger(verbosity, "airbnb_prices")
 
     logger.info("Loading the dataset ...")
     pipeline = DataPipeline.from_file(data, config)
@@ -106,13 +106,18 @@ def main(model, hyperparameters, verbosity, no_export, data, config):
     # Training and evaluation
     X_train, y_train = pipeline.train_data
     X_val, y_val = pipeline.val_data
-    _, score = train_eval.train_eval_once(
+    _, train_score, val_score = train_eval.train_eval_once(
         model=model, x_train=X_train, y_train=y_train, x_test=X_val, y_test=y_val
     )
-    logger.info(f"RMSE on val data: {score}")
+    logger.info(f"RMSE on val data: {val_score}")
     if not no_export:
         logger.info("Exporting to csv ...")
-        train_eval.export_results_to_csv(model_name=model, hyperparameters=hyperparameters, score=score)
+        train_eval.export_results_to_csv(
+            model_name=model,
+            hyperparameters=hyperparameters,
+            train_score=train_score,
+            val_score=val_score,
+        )
     logger.info("Done")
 
 
