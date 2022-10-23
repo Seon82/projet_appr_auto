@@ -1,3 +1,4 @@
+from pydoc import locate
 from typing import Dict
 
 import sklearn.ensemble as ensemble
@@ -13,11 +14,17 @@ def get_model(model: str, hyperparams: Dict):
     Returns:
         chosen model object.
     """
-    if model == "random forest":
+    model_lower = model.lower()
+    if model_lower in ("random_forest", "rf"):
         return ensemble.RandomForestRegressor(**hyperparams)
-    if model == "extreme random forest":
+    if model_lower in ("extreme_random_forest", "erh"):
         return ensemble.ExtraTreesRegressor(**hyperparams)
-    if model == "adaboost":
+    if model_lower == "adaboost":
         return ensemble.AdaBoostRegressor(**hyperparams)
-    if model == "gradient boosting":
+    if model_lower == ("gradient_boosting", "gb"):
         return ensemble.GradientBoostingRegressor(**hyperparams)
+    for module in ["linear_model", "svm", "ensemble", "neighbors", "neural_network"]:
+        model_obj = locate(f"sklearn.{module}.{model}")
+        if model_obj is not None:
+            return model_obj(**hyperparams)
+    raise ValueError(f"Model {model} not found")

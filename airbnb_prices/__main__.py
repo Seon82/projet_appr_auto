@@ -1,14 +1,42 @@
 """Run the airbnb prices detection system."""
-import argparse
+
 import logging
 from pathlib import Path
 
-from airbnb_prices.data import dataset, feature_engineering
+import click
+
+from airbnb_prices.data import DataPipeline
 from airbnb_prices.eval import train_eval
 from airbnb_prices.models import models
 
 CONFIG_PATH = Path("./examples/config.json")
 DATA_PATH = Path("./data/train_airbnb_berlin.csv")
+
+
+def create_logger(log_level: str | int, name: str = None) -> logging.Logger:
+    """
+    Generate a logger object with an attached console handler.
+
+    Args:
+        log_level: CRITICAL|ERROR|INFO|DEBUG
+        name: The logger's name. All logs from submodules will be captured by this logger.
+    """
+    if isinstance(log_level, str):
+        try:
+            log_level = getattr(logging, log_level)
+        except AttributeError as error:
+            raise ValueError(f"{log_level} isn't a valid logging level.") from error
+    logger = logging.getLogger(name=name)
+    logger.setLevel(log_level)
+
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(log_level)
+    # create formatter and add it to the handlers
+    formatter = logging.Formatter("[%(levelname)s] (%(name)s) - %(message)s")
+    console_handler.setFormatter(formatter)
+    # add the handlers to the logger
+    logger.addHandler(console_handler)
+    return logger
 
 
 def hyper_to_dict(hyper: str):
@@ -27,35 +55,68 @@ def hyper_to_dict(hyper: str):
     return hyper_dict
 
 
-def main(model_str: str, hyperparams_str: str):
-    logging.info("Loading the dataset ...")
-    config = dataset.load_config(CONFIG_PATH)
-    data = dataset.load_data(DATA_PATH, config)
-    logging.info("Replacing missing data ...")
-    data = dataset.fillnan_dataset(data)
-    logging.info("Feature engineering ...")
-    feature_engineering.apply_feature_engineering(data, CONFIG_PATH)
-    logging.info("Preprocessing ...")
-    x_train, y_train, x_test, y_test = dataset.dummy_preprocessing(data)
+@click.command()
+@click.argument("model")
+@click.option(
+    "--hyperparameters",
+    "--hyper",
+    "--params",
+    type=click.Choice(["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]),
+    help="Hyperparameters to be passed to the model: \"n_estimators=100,criterion='gini'\"",
+)
+@click.option(
+    "--verbosity",
+    default="INFO",
+    type=click.Choice(["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]),
+    help="Verbosity level.",
+)
+@click.option(
+    "--no-export",
+    is_flag=True,
+    default=False,
+    help="Do not save the results to a csv file.",
+)
+@click.option(
+    "--data",
+    type=click.Path(dir_okay=False),
+    default=DATA_PATH,
+    help="Path to the data csv.",
+)
+@click.option(
+    "--config",
+    type=click.Path(dir_okay=False),
+    default=CONFIG_PATH,
+    help="Path to the configuration json.",
+)
+def main(model, hyperparameters, verbosity, no_export, data, config):
+    logger = create_logger(verbosity, __name__)
+
+    logger.info("Loading the dataset ...")
+    pipeline = DataPipeline.from_file(data, config)
+    logger.info("Replacing missing data ...")
+    pipeline.infere_nan()
+    logger.info("Feature engineering ...")
+    pipeline.apply_feature_engineering()
+    logger.info("Preprocessing ...")
+    pipeline.apply_preprocessing()
+    pipeline.dropna()
     # Load the model
-    hyperparams = hyper_to_dict(hyperparams_str)
-    model = models.get_model(model=model_str, hyperparams=hyperparams)
-    logging.info("Training phase ...")
+    hyperparams = hyper_to_dict(hyperparameters)
+    model = models.get_model(model=model, hyperparams=hyperparams)
+    logger.info("Training phase ...")
     # Training and evaluation
+    X_train, y_train = pipeline.train_data
+    X_val, y_val = pipeline.val_data
     _, score = train_eval.train_eval_once(
-        model=model, x_train=x_train, y_train=y_train, x_test=x_test, y_test=y_test
+        model=model, x_train=X_train, y_train=y_train, x_test=X_val, y_test=y_val
     )
-    logging.info("Exporting to csv ...")
-    train_eval.export_results_to_csv(model_name=model_str, hyperparameters=hyperparams_str, score=score)
+    logger.info(f"RMSE on val data: {score}")
+    if not no_export:
+        logger.info("Exporting to csv ...")
+        train_eval.export_results_to_csv(model_name=model, hyperparameters=hyperparameters, score=score)
+    logger.info("Done")
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Airbnb price prediction program")
-    parser.add_argument(
-        "model",
-        help="Model to train (available models: see doc)",
-        type=str,
-    )
-    parser.add_argument("--hyper", help="Hyperparameters", type=str, default="")
-    args = parser.parse_args()
-    main(model_str=args.model, hyperparams_str=args.hyper)
+    # pylint: disable=no-value-for-parameter
+    main()
