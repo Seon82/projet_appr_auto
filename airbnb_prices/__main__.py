@@ -61,7 +61,6 @@ def hyper_to_dict(hyper: str):
     "--hyperparameters",
     "--hyper",
     "--params",
-    type=click.Choice(["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]),
     help="Hyperparameters to be passed to the model: \"n_estimators=100,criterion='gini'\"",
 )
 @click.option(
