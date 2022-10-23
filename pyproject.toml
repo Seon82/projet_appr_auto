@@ -21,6 +21,7 @@ scikit-learn = "^1.1.2"
 black = "^22.10.0"
 isort = "^5.10.1"
 pylint = "^2.15.4"
+pylint-pydantic = "^0.1.4"
 
 [build-system]
 requires = ["poetry-core"]
@@ -54,6 +55,8 @@ disable = """
     unnecessary-pass
     """
 extension-pkg-whitelist="pydantic"
+load-plugins = "pylint_pydantic"
+
 
 [tool.pylint.FORMAT]
 max-line-length=104

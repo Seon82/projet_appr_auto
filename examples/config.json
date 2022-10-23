@@ -30,6 +30,7 @@
             "Room Type"
         ],
         "standardize": [],
+        "min_max": [],
         "drop": [
             "Square Feet",
             "Postal Code",
@@ -41,6 +42,7 @@
             "Neighborhood Group",
             "Property Type",
             "Room Type"
-        ]
+        ],
+        "keep": []
     }
 }
