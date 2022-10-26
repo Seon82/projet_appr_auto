@@ -11,7 +11,7 @@ from airbnb_prices.eval import train_eval
 from airbnb_prices.models import models
 
 CONFIG_PATH = Path("./examples/config.json")
-DATA_PATH = Path("./data/train_airbnb_berlin.xls")
+DATA_PATH = Path("./data/train_airbnb_berlin.csv")
 
 
 def create_logger(log_level: str | int, name: str = None) -> logging.Logger:
@@ -51,9 +51,9 @@ def hyper_to_dict(hyper: str):
     hyper_dict = {}
     for block in hyper_blocks:
         block_list = block.split("=")
-        if block_list[1][0].isdigit():
+        if block_list[1].isdigit():
             hyper_dict[block_list[0]] = int(block_list[1])
-        elif block_list[1].isdigit():
+        elif block_list[1][0].isdigit():
             hyper_dict[block_list[0]] = float(block_list[1])
         else:
             hyper_dict[block_list[0]] = block_list[1]
@@ -70,7 +70,7 @@ def hyper_to_dict(hyper: str):
 )
 @click.option(
     "--verbosity",
-    default="INFO",
+    default="WARNING",
     type=click.Choice(["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]),
     help="Verbosity level.",
 )
@@ -142,7 +142,7 @@ def main(
             y_test=y_val,
             crossvalidation=crossvalidation,
         )
-        logger.info("RMSE on the test data: {}".format(test_score))
+        logger.info(f"RMSE on the test data: {test_score}")
 
     if not no_export:
         logger.info("Exporting to csv ...")

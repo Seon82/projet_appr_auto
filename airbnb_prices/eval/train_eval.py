@@ -40,8 +40,8 @@ def train_eval_once(
     train_score = np.sqrt(mean_squared_error(y_train, y_pred_train))
     test_score = np.sqrt(mean_squared_error(y_test, y_pred_test))
     if not crossvalidation:
-        logger.info(" RMSE score on train set: {}".format(train_score))
-        logger.info(" RMSE score on validation set: {}".format(test_score))
+        logger.info(f" RMSE score on train set: {train_score}")
+        logger.info(f" RMSE score on validation set: {test_score}")
     return model, train_score, test_score
 
 
