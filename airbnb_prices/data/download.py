@@ -1,6 +1,5 @@
 import hashlib
 from pathlib import Path
-from typing import Optional
 from urllib.request import urlopen
 
 from tqdm import tqdm
@@ -39,8 +38,8 @@ def checksum(file: Path) -> bytes:
     Compute the md5 checksum of a file.
     """
     hasher = hashlib.md5()
-    with open(file, "rb") as f:
-        while chunk := f.read(128 * hasher.block_size):
+    with open(file, "rb") as open_file:
+        while chunk := open_file.read(128 * hasher.block_size):
             hasher.update(chunk)
     return hasher.digest()
 
