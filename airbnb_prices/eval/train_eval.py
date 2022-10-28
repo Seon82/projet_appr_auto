@@ -1,4 +1,5 @@
 import logging
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -80,4 +81,6 @@ def export_results_to_csv(model_name: str, hyperparameters: str, train_score: fl
     if not results_dir.exists():
         results_dir.mkdir()
     date_str = datetime.now().strftime("%m%d%Y%H%M%S")
+    while os.path.exists(results_dir / (date_str + "_results.csv")):
+        date_str += "_1"
     results_df.to_csv(results_dir / (date_str + "_results.csv"))
