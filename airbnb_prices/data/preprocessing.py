@@ -24,7 +24,9 @@ def apply_preprocessing(
     return scalers, df
 
 
-def apply_scaling(df, col, scalers, scaler_type):
+def apply_scaling(
+    df: pd.DataFrame, col: str, scalers: dict[str, TransformerMixin], scaler_type: TransformerMixin
+):
     if col in scalers:
         df[col] = scalers[col].transform(df[col].values.reshape(-1, 1))
     else:
