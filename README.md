@@ -30,9 +30,3 @@ The package also exposes a CLI for quick model training, run `python airbnb_pric
 * We use [poetry](https://github.com/python-poetry/poetry) for dependency management. The project can be installed in development mode by running `poetry install`.
 * Code must be formatted using `black` and `isort`.
 * Use `pylint` to check code quality before committing.
-
-## Links
-
-Find the report for this project on overleaf.
-
-Link to edit the report: https://www.overleaf.com/3389558812mrxxwvwnvfpd Link to view the report only: https://www.overleaf.com/read/vgmnnsqnfjdt
