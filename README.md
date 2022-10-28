@@ -10,7 +10,7 @@ from airbnb_prices import DataPipeline
 from airbnb_prices.data import download_dataset
 
 # Download the dataset
-dowload_dataset("./data/train_airbnb_berlin.csv")
+download_dataset("./data/train_airbnb_berlin.csv")
 
 # Preprocess the data using parameters from the config file
 pipeline = DataPipeline.from_file("./data/train_airbnb_berlin.csv", "./examples/config.json")
