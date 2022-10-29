@@ -99,6 +99,7 @@ def hyper_to_dict(hyper: str):
     default=CONFIG_PATH,
     help="Path to the configuration json.",
 )
+
 def main(
     model: str,
     hyperparameters: str,
