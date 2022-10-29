@@ -21,7 +21,7 @@ def get_model(model: str, hyperparams: Dict):
         return ensemble.ExtraTreesRegressor(**hyperparams)
     if model_lower == "adaboost":
         return ensemble.AdaBoostRegressor(**hyperparams)
-    if model_lower == ("gradient_boosting", "gb"):
+    if model_lower in ("gradient_boosting", "gb"):
         return ensemble.GradientBoostingRegressor(**hyperparams)
     for module in ["linear_model", "svm", "ensemble", "neighbors", "neural_network"]:
         model_obj = locate(f"sklearn.{module}.{model}")
