@@ -70,7 +70,7 @@ def hyper_to_dict(hyper: str):
 )
 @click.option(
     "--verbosity",
-    default="WARNING",
+    default="INFO",
     type=click.Choice(["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]),
     help="Verbosity level.",
 )

@@ -44,7 +44,7 @@ def checksum(file: Path) -> bytes:
     return hasher.digest()
 
 
-def download(dest_file: Path | str = "data/train_airbnb_berlin.csv"):
+def download_dataset(dest_file: Path | str = "data/train_airbnb_berlin.csv"):
     dest_file = Path(dest_file)
     correct_checksum = b"\x0f\x85:\xe3\xcdi\x9fRq{\xb7\xa6\xbb\xbda\xc2"
     if not dest_file.exists() or checksum(dest_file) != correct_checksum:

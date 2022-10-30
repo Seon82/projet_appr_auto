@@ -1,2 +1,2 @@
 from .data_pipeline import DataPipeline
-from .download import download
+from .download import download_dataset
